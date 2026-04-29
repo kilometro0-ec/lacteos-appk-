@@ -1,10 +1,10 @@
-import { APP_CONFIG } from "../config/appConfig.js";
+import { CONFIG } from "../config.js";
 
-export function Header() {
+export function renderHeader() {
   return `
-    <header class="header">
-      <h1>${APP_CONFIG.appName}</h1>
-      <span>v${APP_CONFIG.version}</span>
-    </header>
+    <div class="header">
+      <span>${CONFIG.APP_NAME}</span>
+      <span>v${CONFIG.VERSION}</span>
+    </div>
   `;
 }
