@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>💰 Finanzas</h1>
+
+<div id="fin"></div>
+
+<script src="main.js"></script>
+
+<script>
+async function cargarFin() {
+  const res = await fetch(`${API}?pestaña=Pedidos`);
+  const data = await res.json();
+
+  let total = 0;
+
+  data.forEach(p => {
+    if (p.Estado === "PENDIENTE") {
+      total += parseFloat(p.Total) || 0;
+    }
+  });
+
+  document.getElementById("fin").innerHTML =
+    "Total Pendiente: $" + total.toFixed(2);
+}
+
+cargarFin();
+</script>
+
+</body>
+</html>
