@@ -1,21 +1,46 @@
-<div style="padding:20px;font-family:'Work Sans',sans-serif">
+<!-- SOLO CONTENIDO, NO HTML, NO HEAD -->
 
-  <h2 style="font-weight:800">Lógica Láctea ✔</h2>
-
-  <div style="margin-top:20px;display:grid;gap:12px">
-
-    <div style="padding:15px;background:#f3f3f3;border-radius:12px">
-      🚚 Ruta de Hoy: <span id="badge-ruta">0</span>
+<header class="mb-8 flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-black text-slate-800 tracking-tighter uppercase leading-none">
+            Lógica Láctea
+        </h1>
+        <p id="saludo" class="text-primary font-bold text-[10px] uppercase tracking-[0.2em] mt-1">
+            Sincronizando...
+        </p>
     </div>
 
-    <div style="padding:15px;background:#f3f3f3;border-radius:12px">
-      💰 Finanzas: <span id="badge-finanzas">$0</span>
-    </div>
+    <button onclick="window.location.href='DashboardLacteo.html'"
+        class="w-12 h-12 bg-white rounded-2xl border border-outline flex items-center justify-center text-primary shadow-sm active:scale-90 transition-transform">
+        <span class="material-symbols-outlined font-bold text-2xl">analytics</span>
+    </button>
+</header>
 
-    <div style="padding:15px;background:#f3f3f3;border-radius:12px">
-      📦 Stock crítico: <span id="badge-stock">0</span>
-    </div>
+<main id="main-panel" class="grid grid-cols-2 gap-4 flex-grow content-start transition-opacity duration-300 loading-state">
 
-  </div>
+    <!-- TU DISEÑO EXACTO AQUÍ -->
 
-</div>
+    <!-- VENTAS -->
+    <button onclick="window.location.href='RegistrodeVentas.html'"
+        class="grid-button col-span-2 bg-primary p-6 rounded-[2.5rem] flex items-center justify-between shadow-lg text-white">
+        <div class="flex items-center gap-4 text-left">
+            <div class="bg-white/20 p-3 rounded-2xl">
+                <span class="material-symbols-outlined text-3xl font-bold">add_shopping_cart</span>
+            </div>
+            <div>
+                <span class="text-xl font-black uppercase italic block">Ventas</span>
+                <span class="text-[9px] opacity-80 font-medium">Registrar salida de productos</span>
+            </div>
+        </div>
+        <div id="badge-ventas" class="badge">0</div>
+    </button>
+
+    <!-- resto igual... -->
+
+</main>
+
+<footer class="mt-8 text-center">
+    <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">
+        Quito • 2026
+    </p>
+</footer>
