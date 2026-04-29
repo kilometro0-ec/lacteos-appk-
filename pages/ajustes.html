@@ -1,11 +1,114 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ajustes - Lógica Láctea</title>
 
-<h1>⚙️ Ajustes</h1>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<p>Empresa: Kilómetro Cero</p>
-<p>Versión: v1.0</p>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: "#a21caf",
+                background: "#faf5ff",
+                outline: "#e9d5ff"
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body {
+    font-family: 'Work Sans', sans-serif;
+}
+.card {
+    border-radius: 1.5rem;
+}
+</style>
+
+</head>
+
+<body class="bg-background text-slate-900 min-h-screen flex flex-col px-5 py-6">
+
+<!-- HEADER -->
+<header class="mb-6 flex items-center justify-between">
+    
+    <button onclick="history.back()"
+        class="w-10 h-10 bg-white border border-outline rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+
+    <h1 class="text-lg font-black uppercase">Ajustes</h1>
+
+    <div class="w-10"></div>
+</header>
+
+<!-- CONTENIDO -->
+<main class="flex flex-col gap-4 flex-grow">
+
+    <!-- EMPRESA -->
+    <div class="bg-white p-5 card shadow-sm border border-outline">
+        <p class="text-xs uppercase text-slate-400 mb-2">Empresa</p>
+        <h2 class="text-lg font-bold">Kilómetro Cero</h2>
+    </div>
+
+    <!-- VERSION -->
+    <div class="bg-white p-5 card shadow-sm border border-outline">
+        <p class="text-xs uppercase text-slate-400 mb-2">Versión</p>
+        <h2 class="text-lg font-bold">v1.0.0</h2>
+    </div>
+
+    <!-- CONFIGURACIONES -->
+    <div class="bg-white p-5 card shadow-sm border border-outline">
+
+        <p class="text-xs uppercase text-slate-400 mb-4">Configuraciones</p>
+
+        <div class="flex flex-col gap-3">
+
+            <!-- BOTÓN ACTUALIZAR -->
+            <button onclick="actualizarApp()"
+                class="w-full bg-primary text-white py-3 rounded-xl font-bold">
+                🔄 Sincronizar datos
+            </button>
+
+            <!-- BOTÓN LIMPIAR -->
+            <button onclick="limpiarCache()"
+                class="w-full bg-slate-100 py-3 rounded-xl font-bold">
+                🧹 Limpiar caché
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="mt-6 text-center text-xs text-slate-400 uppercase">
+Kilómetro Cero • 2026
+</footer>
+
+<!-- JS -->
+<script>
+
+function actualizarApp() {
+    alert("🔄 Sincronizando con Google Sheets...");
+    location.reload();
+}
+
+function limpiarCache() {
+    localStorage.clear();
+    alert("🧹 Caché limpiado");
+}
+
+</script>
 
 </body>
 </html>
