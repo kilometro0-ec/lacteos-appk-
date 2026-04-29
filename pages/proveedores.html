@@ -1,32 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos</title>
+
+<link rel="stylesheet" href="../styles/global.css">
+
+</head>
 <body>
 
-<h1>🚚 Transportadoras</h1>
+<header class="header">
+  <h2>📦 Pedidos</h2>
+</header>
 
-<div id="prov"></div>
+<div style="padding:15px">
 
-<script src="main.js"></script>
+<button onclick="crearPedido()" class="btn-primary">
+  + Nuevo Pedido
+</button>
 
-<script>
-async function cargarProv() {
-  const res = await fetch(`${API}?pestaña=Transportadoras`);
+<div id="lista"></div>
+
+</div>
+
+<script type="module">
+import { API } from "../config.js";
+
+async function cargarPedidos() {
+  const res = await fetch(`${API}?pestaña=Pedidos`);
   const data = await res.json();
 
   let html = "";
 
   data.forEach(p => {
     html += `
-      <div>
-        ${p.Nombre} - ${p.Zona} - ${p.Estado}
+      <div class="card">
+        <b>${p.Cliente}</b><br>
+        ${p.Dirección}<br>
+        Zona: ${p.Zona}<br>
+        Estado: <b>${p.Estado}</b><br><br>
+
+        <button onclick="entregar('${p.ID}')" class="btn-success">
+          Entregar
+        </button>
       </div>
     `;
   });
 
-  document.getElementById("prov").innerHTML = html;
+  document.getElementById("lista").innerHTML = html;
 }
 
-cargarProv();
+window.entregar = async (id) => {
+  await fetch(API, {
+    method: "POST",
+    body: JSON.stringify({
+      pestaña: "Pedidos",
+      accion: "entregar",
+      ID: id,
+      Usuario: "Darwin"
+    })
+  });
+
+  cargarPedidos();
+};
+
+cargarPedidos();
 </script>
 
 </body>
