@@ -1,28 +1,24 @@
-import { fetchData } from "./api.js";
+import { GET } from "./api.js";
 
 export async function getDashboardData() {
-  const [ventas, inventario] = await Promise.all([
-    fetchData("Ventas"),
-    fetchData("Inventario")
-  ]);
 
-  const pendientes = ventas.filter(v =>
-    String(v.Estado || "").trim().toUpperCase() === "PENDIENTE"
-  );
+  const pedidos = await GET("Pedidos");
+  const inventario = await GET("Inventario");
 
-  const total = pendientes.reduce((acc, v) => {
-    let t = String(v.Total || "0").replace(',', '.').replace(/[^\d.-]/g, '');
-    return acc + (parseFloat(t) || 0);
+  const pendientes = pedidos.filter(p => p.Estado === "PENDIENTE");
+
+  const total = pendientes.reduce((acc, p) => {
+    let val = parseFloat(p.Total || 0);
+    return acc + val;
   }, 0);
 
   const critico = inventario.filter(i => {
-    let s = String(i["Stock Inicial"] || "0").replace(',', '.').replace(/[^\d.-]/g, '');
-    return (parseFloat(s) || 0) < 5;
+    return parseFloat(i.Stock) < parseFloat(i.Mínimo);
   }).length;
 
   return {
-    pedidosPendientes: pendientes.length,
-    totalPendiente: total,
-    stockCritico: critico
+    pedidos: pendientes.length,
+    total,
+    critico
   };
 }
