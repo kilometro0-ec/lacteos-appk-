@@ -1,32 +1,186 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Inventario - Lógica Láctea</title>
 
-<h1>📊 Inventario</h1>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<div id="inv"></div>
-
-<script src="main.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 
 <script>
-async function cargarInv() {
-  const res = await fetch(`${API}?pestaña=Inventario`);
-  const data = await res.json();
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: "#a21caf",
+                background: "#faf5ff",
+                outline: "#e9d5ff",
+                danger: "#ef4444",
+                warning: "#f59e0b",
+                success: "#16a34a"
+            }
+        }
+    }
+}
+</script>
 
-  let html = "";
+<style>
+body { font-family: 'Work Sans', sans-serif; }
 
-  data.forEach(i => {
-    html += `
-      <div>
-        ${i.Producto} - Stock: ${i.Stock}
-      </div>
-    `;
-  });
-
-  document.getElementById("inv").innerHTML = html;
+.card {
+    border-radius: 1.5rem;
 }
 
+.input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e9d5ff;
+}
+</style>
+
+</head>
+
+<body class="bg-background text-slate-900 min-h-screen flex flex-col px-5 py-6">
+
+<!-- HEADER -->
+<header class="mb-6 flex items-center justify-between">
+    
+    <button onclick="history.back()"
+        class="w-10 h-10 bg-white border border-outline rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+
+    <h1 class="text-lg font-black uppercase">Inventario</h1>
+
+    <button onclick="cargarInv()"
+        class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined">refresh</span>
+    </button>
+</header>
+
+<!-- BUSCADOR -->
+<div class="mb-4">
+    <input id="buscar" oninput="filtrar()"
+        class="input"
+        placeholder="Buscar producto...">
+</div>
+
+<!-- RESUMEN -->
+<div class="grid grid-cols-3 gap-3 mb-4 text-center">
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400 uppercase">Productos</p>
+        <h2 id="totalProd" class="font-black text-lg">0</h2>
+    </div>
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400 uppercase">Bajo stock</p>
+        <h2 id="criticos" class="font-black text-lg text-warning">0</h2>
+    </div>
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400 uppercase">Sin stock</p>
+        <h2 id="agotados" class="font-black text-lg text-danger">0</h2>
+    </div>
+
+</div>
+
+<!-- LISTA -->
+<main id="inv" class="flex flex-col gap-3 flex-grow"></main>
+
+<!-- FOOTER -->
+<footer class="mt-6 text-center text-xs text-slate-400 uppercase">
+Kilómetro Cero • 2026
+</footer>
+
+<!-- JS -->
+<script type="module">
+
+const API = "https://script.google.com/macros/s/AKfycbwglNauq2RBBZqcPkamIBqioTShRzO_Jo9Afjo7r0OWC7AKy6740QEeOywZ26Pssm6u/exec";
+
+let inventario = [];
+
+// =======================
+// 📦 CARGAR INVENTARIO
+// =======================
+async function cargarInv() {
+
+    const res = await fetch(`${API}?pestaña=Inventario`);
+    inventario = await res.json();
+
+    render(inventario);
+}
+
+// =======================
+// 🎨 RENDER
+// =======================
+function render(data) {
+
+    let html = "";
+
+    let criticos = 0;
+    let agotados = 0;
+
+    data.forEach(i => {
+
+        const stock = parseFloat(i.Stock) || 0;
+        const min = parseFloat(i.Mínimo) || 0;
+
+        let color = "text-green-600";
+
+        if (stock === 0) {
+            color = "text-red-500";
+            agotados++;
+        } else if (stock <= min) {
+            color = "text-yellow-500";
+            criticos++;
+        }
+
+        html += `
+        <div class="bg-white p-4 card border border-outline shadow-sm flex justify-between items-center">
+
+            <div>
+                <h3 class="font-bold">${i.Producto || "-"}</h3>
+                <p class="text-xs text-slate-500">Mín: ${min}</p>
+            </div>
+
+            <div class="text-right">
+                <p class="text-lg font-black ${color}">${stock}</p>
+                <p class="text-xs text-slate-400">Stock</p>
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById("inv").innerHTML = html;
+
+    document.getElementById("totalProd").innerText = data.length;
+    document.getElementById("criticos").innerText = criticos;
+    document.getElementById("agotados").innerText = agotados;
+}
+
+// =======================
+// 🔍 FILTRO
+// =======================
+function filtrar() {
+
+    const txt = document.getElementById("buscar").value.toLowerCase();
+
+    const filtrado = inventario.filter(i =>
+        (i.Producto || "").toLowerCase().includes(txt)
+    );
+
+    render(filtrado);
+}
+
+// INIT
 cargarInv();
+
 </script>
 
 </body>
