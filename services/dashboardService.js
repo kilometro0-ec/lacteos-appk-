@@ -1,3 +1,5 @@
+import { get } from "./api.js";
+
 export async function getDashboardData() {
   try {
     const ventas = await get("Ventas") || [];
@@ -15,10 +17,18 @@ export async function getDashboardData() {
       (parseFloat(i["Stock Inicial"] || 0)) < 5
     ).length;
 
-    return { pendientes: pendientes.length, total, stockCritico };
+    return {
+      pendientes: pendientes.length,
+      total,
+      stockCritico
+    };
 
   } catch (e) {
     console.error("Error API:", e);
-    return { pendientes: 0, total: 0, stockCritico: 0 };
+    return {
+      pendientes: 0,
+      total: 0,
+      stockCritico: 0
+    };
   }
 }
