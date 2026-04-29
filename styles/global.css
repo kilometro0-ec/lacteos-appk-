@@ -1,19 +1,40 @@
 body {
   margin: 0;
   font-family: Arial;
+  background: #faf5ff;
 }
 
+/* HEADER */
 .header {
-  background: #0A1F44;
+  background: #a21caf;
   color: white;
-  padding: 10px;
+  padding: 15px;
+  font-weight: bold;
 }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #eee;
-  display: flex;
-  justify-content: space-around;
+/* CARDS */
+.card {
+  background: white;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* BOTONES */
+.btn-primary {
+  background: #a21caf;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
 }
