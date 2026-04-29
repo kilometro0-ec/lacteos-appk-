@@ -1,6 +1,6 @@
 import { get } from "./api.js";
 
-export async function loadDashboard() {
+export async function getDashboardData() {
   const ventas = await get("Ventas");
   const inventario = await get("Inventario");
 
@@ -8,13 +8,17 @@ export async function loadDashboard() {
     String(v.Estado || "").toUpperCase() === "PENDIENTE"
   );
 
-  const total = pendientes.reduce((a, v) =>
-    a + (parseFloat(v.Total || 0) || 0), 0
-  );
+  const total = pendientes.reduce((acc, v) => {
+    return acc + (parseFloat(v.Total || 0) || 0);
+  }, 0);
 
   const stockCritico = inventario.filter(i =>
     (parseFloat(i["Stock Inicial"] || 0)) < 5
   ).length;
 
-  return { pendientes, total, stockCritico };
+  return {
+    pendientes: pendientes.length,
+    total,
+    stockCritico
+  };
 }
