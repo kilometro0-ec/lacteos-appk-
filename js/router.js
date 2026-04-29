@@ -1,5 +1,3 @@
-export function go(url) {
-  window.location.href = url;
+export function go(page) {
+  window.location.hash = page;
 }
-
-window.go = go;
