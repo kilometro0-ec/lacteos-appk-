@@ -1,256 +1,212 @@
 <!DOCTYPE html>
-<html class="light" lang="es">
+<html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lógica Láctea - Gestión</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Lógica Láctea</title>
+
+<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                primary: "#a21caf",
-                background: "#faf5ff",
-                outline: "#e9d5ff",
-                success: "#16a34a"
-            }
-        }
-    }
-}
-</script>
+<!-- Estilos globales -->
+<link rel="stylesheet" href="./styles/global.css">
 
 <style>
-body { font-family: 'Work Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-
-/* BOTONES */
-.grid-button {
-    position: relative;
-    transition: transform 0.1s ease;
-    cursor: pointer;
-}
-.grid-button:active {
-    transform: scale(0.95);
-    filter: brightness(0.9);
-}
-
-/* BADGES */
-.badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background-color: #ef4444;
-    color: white;
-    font-size: 10px;
-    font-weight: 800;
-    min-width: 22px;
-    height: 22px;
-    padding: 0 4px;
-    border-radius: 11px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid white;
-}
-
-/* LOADER */
-#loader {
-    position: fixed;
-    inset: 0;
-    background: #faf5ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 9999;
-    transition: opacity 0.5s ease;
-}
-
-/* VACA */
-#mouth {
-    animation: chew 0.8s infinite;
-}
-@keyframes chew {
-    0%,100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.3); }
-}
-
-.blink {
-    animation: blink 3s infinite;
-}
-@keyframes blink {
-    0%,90%,100% { opacity: 0; }
-    95% { opacity: 1; }
-}
-
-svg {
-    animation: float 2s ease-in-out infinite;
-}
-@keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-}
-
-/* APP */
+body { font-family: 'Work Sans', sans-serif; }
 .hidden { display: none; }
+
+/* Loader */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #faf5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+/* Animaciones */
+#mouth { animation: chew 0.8s infinite; }
+@keyframes chew {
+  0%,100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.3); }
+}
+
+svg { animation: float 2s ease-in-out infinite; }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 </style>
 </head>
 
-<body class="bg-background text-slate-900">
+<body class="bg-[#faf5ff] text-slate-900">
 
 <!-- 🐄 LOADER -->
 <div id="loader">
-
-<svg width="140" height="140" viewBox="0 0 200 200">
-
-    <!-- Cara -->
-    <circle cx="100" cy="100" r="70" fill="#fff" stroke="#000" stroke-width="3"/>
-
-    <!-- Orejas -->
-    <ellipse cx="40" cy="70" rx="20" ry="30" fill="#000"/>
-    <ellipse cx="160" cy="70" rx="20" ry="30" fill="#000"/>
-
-    <!-- Ojos -->
-    <circle cx="75" cy="90" r="10" fill="#000"/>
-    <circle cx="125" cy="90" r="10" fill="#000"/>
-
-    <!-- Parpadeo -->
-    <rect class="blink" x="65" y="80" width="20" height="20" fill="#fff"/>
-    <rect class="blink" x="115" y="80" width="20" height="20" fill="#fff"/>
-
-    <!-- Nariz -->
-    <ellipse cx="100" cy="120" rx="30" ry="20" fill="#fca5a5"/>
-
-    <!-- Boca -->
-    <rect id="mouth" x="80" y="130" width="40" height="10" rx="5" fill="#000"/>
-
-</svg>
-
-<p class="mt-4 font-bold text-primary uppercase tracking-widest text-sm">
-Cargando sistema...
-</p>
-
+  <svg width="120" height="120" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="70" fill="#fff" stroke="#000"/>
+    <rect id="mouth" x="80" y="130" width="40" height="10" fill="#000"/>
+  </svg>
+  <p class="mt-4 font-bold text-purple-700">Cargando...</p>
 </div>
 
 <!-- APP -->
-<div id="app" class="hidden px-5 py-8 min-h-screen flex flex-col">
+<div id="app" class="hidden p-5 min-h-screen flex flex-col">
 
-<header class="mb-8 flex justify-between items-center">
-    <div>
-        <h1 class="text-2xl font-black uppercase">Lógica Láctea</h1>
-        <p id="saludo" class="text-primary text-xs font-bold">...</p>
-    </div>
-
-    <button onclick="window.location.href='finanzas.html'"
-        class="w-12 h-12 bg-white rounded-2xl border border-outline flex items-center justify-center text-primary shadow-sm">
-        <span class="material-symbols-outlined text-2xl">analytics</span>
-    </button>
+<header class="mb-6">
+  <h1 class="text-2xl font-black">Lógica Láctea</h1>
+  <p id="saludo" class="text-purple-600 text-sm"></p>
 </header>
 
 <main class="grid grid-cols-2 gap-4 flex-grow">
 
-<!-- PEDIDOS -->
-<button onclick="window.location.href='pedidos.html'"
-class="grid-button col-span-2 bg-primary p-6 rounded-[2.5rem] flex justify-between text-white">
-
-<div>
-<span class="text-xl font-black block">Pedidos</span>
-<span class="text-xs opacity-80">Gestión completa</span>
-</div>
-
-<div id="badge-pedidos" class="badge">0</div>
+<button onclick="go('pages/pedidos.html')" class="bg-purple-700 text-white p-6 rounded-3xl col-span-2">
+  📦 Pedidos
+  <div id="badge-pedidos"></div>
 </button>
 
-<!-- INVENTARIO -->
-<button onclick="window.location.href='inventario.html'"
-class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] text-center">
-📊 Inventario
-<div id="badge-stock" class="badge">!</div>
+<button onclick="go('pages/inventario.html')" class="bg-white p-5 rounded-3xl">
+  📊 Inventario
+  <div id="badge-stock"></div>
 </button>
 
-<!-- PROV -->
-<button onclick="window.location.href='proveedores.html'"
-class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] text-center">
-🚚 Prov.
+<button onclick="go('pages/proveedores.html')" class="bg-white p-5 rounded-3xl">
+  🚚 Prov.
 </button>
 
-<!-- CLIENTES -->
-<button onclick="window.location.href='clientes.html'"
-class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] text-center">
-👥 Clientes
+<button onclick="go('pages/clientes.html')" class="bg-white p-5 rounded-3xl">
+  👥 Clientes
 </button>
 
-<!-- FINANZAS -->
-<button onclick="window.location.href='finanzas.html'"
-class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] text-center">
-💰 Finanzas
-<div id="badge-finanzas" class="badge">0</div>
+<button onclick="go('pages/finanzas.html')" class="bg-white p-5 rounded-3xl">
+  💰 Finanzas
+  <div id="badge-finanzas"></div>
 </button>
 
-<!-- AJUSTES -->
-<button onclick="window.location.href='ajustes.html'"
-class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] text-center">
-⚙️ Ajustes
+<button onclick="go('pages/ajustes.html')" class="bg-white p-5 rounded-3xl">
+  ⚙️ Ajustes
 </button>
 
-<!-- RUTA -->
-<button onclick="rutaHoy()"
-class="grid-button col-span-2 bg-black text-white p-6 rounded-[2.5rem] text-center">
-🚛 Ruta de Hoy
-<div id="badge-ruta" class="badge">0</div>
+<button onclick="verRuta()" class="bg-black text-white p-6 rounded-3xl col-span-2">
+  🚛 Ruta de Hoy
+  <div id="badge-ruta"></div>
 </button>
 
 </main>
 
-<footer class="mt-6 text-center text-xs text-slate-400 uppercase">
-Kilómetro Cero • 2026 • v1.0.0
+<footer class="text-center text-xs mt-6">
+Kilómetro Cero • v1.0.0
 </footer>
 
 </div>
 
 <!-- JS -->
 <script type="module">
-import { getDashboardData } from "./services/dairyService.js";
 
+import { getDashboardData } from "./services/dashboardService.js";
+import { go } from "./js/router.js";
+
+window.go = go;
+
+// =========================
+// INIT
+// =========================
 async function init() {
-    try {
-        await getDashboardData();
 
-        setTimeout(() => {
-            document.getElementById("loader").style.opacity = 0;
+  try {
 
-            setTimeout(() => {
-                document.getElementById("loader").style.display = "none";
-                document.getElementById("app").classList.remove("hidden");
-            }, 500);
+    const data = await getDashboardData();
 
-        }, 1200);
+    setBadge("badge-pedidos", data.pedidos);
+    setBadge("badge-finanzas", data.total > 0 ? `$${data.total}` : "");
+    setBadge("badge-stock", data.critico > 0 ? "!" : "");
 
-        saludo();
+    saludo();
 
-    } catch (e) {
-        console.error(e);
-    }
+    // ocultar loader
+    setTimeout(() => {
+      document.getElementById("loader").style.opacity = 0;
+
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("app").classList.remove("hidden");
+      }, 400);
+
+    }, 1000);
+
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-function saludo() {
-    const hr = new Date().getHours();
-    const s = document.getElementById('saludo');
+// =========================
+// BADGES
+// =========================
+function setBadge(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
 
-    if (hr < 12) s.innerText = "Buenos días";
-    else if (hr < 18) s.innerText = "Buenas tardes";
-    else s.innerText = "Buenas noches";
+  if (val && val !== 0) {
+    el.innerText = val;
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
+
+// =========================
+// SALUDO
+// =========================
+function saludo() {
+  const hr = new Date().getHours();
+  const s = document.getElementById("saludo");
+
+  if (hr < 12) s.innerText = "Buenos días";
+  else if (hr < 18) s.innerText = "Buenas tardes";
+  else s.innerText = "Buenas noches";
+}
+
+// =========================
+// RUTA SIMPLE
+// =========================
+async function verRuta() {
+
+  const res = await fetch(`https://script.google.com/macros/s/AKfycbwglNauq2RBBZqcPkamIBqioTShRzO_Jo9Afjo7r0OWC7AKy6740QEeOywZ26Pssm6u/exec?pestaña=Pedidos`);
+  const data = await res.json();
+
+  const pendientes = data.filter(p => p.Estado === "PENDIENTE");
+
+  let zonas = {};
+
+  pendientes.forEach(p => {
+    if (!zonas[p.Zona]) zonas[p.Zona] = [];
+    zonas[p.Zona].push(p);
+  });
+
+  let texto = "RUTA:\n\n";
+
+  Object.keys(zonas).forEach(z => {
+    texto += `Zona ${z}\n`;
+    zonas[z].forEach(p => {
+      texto += `- ${p.Cliente} (${p.Dirección})\n`;
+    });
+    texto += "\n";
+  });
+
+  alert(texto);
 }
 
 init();
-</script>
 
-<script type="module" src="./main.js"></script>
+</script>
 
 </body>
 </html>
