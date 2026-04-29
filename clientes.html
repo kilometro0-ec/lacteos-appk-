@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>👥 Clientes</h1>
+
+<div id="cli"></div>
+
+<script src="main.js"></script>
+
+<script>
+async function cargarClientes() {
+  const res = await fetch(`${API}?pestaña=Clientes`);
+  const data = await res.json();
+
+  let html = "";
+
+  data.forEach(c => {
+    html += `
+      <div>
+        ${c.Nombre} - ${c.Teléfono}
+      </div>
+    `;
+  });
+
+  document.getElementById("cli").innerHTML = html;
+}
+
+cargarClientes();
+</script>
+
+</body>
+</html>
