@@ -1,12 +1,19 @@
-import { renderHeader } from "../components/header.js";
-import { renderNav } from "../components/nav.js";
+async function loadPage(page) {
+  const app = document.getElementById("app");
 
-function initLayout() {
-  const h = document.getElementById("header");
-  const n = document.getElementById("nav");
+  const res = await fetch(`pages/${page}.html`);
+  const html = await res.text();
 
-  if (h) h.innerHTML = renderHeader();
-  if (n) n.innerHTML = renderNav();
+  app.innerHTML = html;
+
+  // activar lógica por página
+  if (page === "pedidos") import("../services/pedidosService.js");
+  if (page === "inventario") import("../services/inventarioService.js");
+  if (page === "dashboard") import("../services/dashboardService.js");
 }
 
-initLayout();
+function init() {
+  loadPage("dashboard");
+}
+
+init();
