@@ -8,6 +8,12 @@ export async function initDashboard() {
   const stock = document.getElementById("badge-stock");
 
   if (ruta) ruta.innerText = data.pendientes;
-  if (finanzas) finanzas.innerText = `$${data.total.toFixed(2)}`;
-  if (stock) stock.innerText = data.stockCritico > 0 ? "!" : 0;
+
+  if (finanzas) {
+    finanzas.innerText = `$${data.total.toFixed(2)}`;
+  }
+
+  if (stock) {
+    stock.innerText = data.stockCritico;
+  }
 }
