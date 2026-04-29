@@ -1,3 +1,3 @@
 export const API = {
-  DAIRY_URL: "https://script.google.com/macros/s/AKfycby68_4A0MEp7EDNa89HGePvhWC56j3GyKx8RRIX3BGd-E_J6DG3sT-8DEXEYMXr_qMTrA/exec"
+  DAIRY_URL: "https://script.google.com/macros/s/AKfycbwglNauq2RBBZqcPkamIBqioTShRzO_Jo9Afjo7r0OWC7AKy6740QEeOywZ26Pssm6u/exec"
 };
