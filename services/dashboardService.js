@@ -1,24 +1,20 @@
-import { GET } from "./api.js";
+import { get } from "./api.js";
 
-export async function getDashboardData() {
+export async function loadDashboard() {
+  const ventas = await get("Ventas");
+  const inventario = await get("Inventario");
 
-  const pedidos = await GET("Pedidos");
-  const inventario = await GET("Inventario");
+  const pendientes = ventas.filter(v =>
+    String(v.Estado || "").toUpperCase() === "PENDIENTE"
+  );
 
-  const pendientes = pedidos.filter(p => p.Estado === "PENDIENTE");
+  const total = pendientes.reduce((a, v) =>
+    a + (parseFloat(v.Total || 0) || 0), 0
+  );
 
-  const total = pendientes.reduce((acc, p) => {
-    let val = parseFloat(p.Total || 0);
-    return acc + val;
-  }, 0);
+  const stockCritico = inventario.filter(i =>
+    (parseFloat(i["Stock Inicial"] || 0)) < 5
+  ).length;
 
-  const critico = inventario.filter(i => {
-    return parseFloat(i.Stock) < parseFloat(i.Mínimo);
-  }).length;
-
-  return {
-    pedidos: pendientes.length,
-    total,
-    critico
-  };
+  return { pendientes, total, stockCritico };
 }
