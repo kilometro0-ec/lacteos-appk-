@@ -1,41 +1,281 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="light" lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Pedidos</title>
-</head>
-<body>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pedidos - Lógica Láctea</title>
 
-<h1>📦 Pedidos</h1>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<button onclick="crearPedido()">+ Nuevo Pedido</button>
-
-<div id="lista"></div>
-
-<script src="main.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 
 <script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: "#a21caf",
+                background: "#faf5ff",
+                outline: "#e9d5ff",
+                success: "#16a34a",
+                danger: "#ef4444",
+                warning: "#f59e0b"
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body { font-family: 'Work Sans', sans-serif; }
+
+.card { border-radius: 1.5rem; }
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e9d5ff;
+}
+</style>
+
+</head>
+
+<body class="bg-background text-slate-900 min-h-screen flex flex-col px-5 py-6">
+
+<!-- HEADER -->
+<header class="mb-6 flex items-center justify-between">
+
+    <button onclick="history.back()"
+        class="w-10 h-10 bg-white border border-outline rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+
+    <h1 class="text-lg font-black uppercase">Pedidos</h1>
+
+    <button onclick="toggleForm()"
+        class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined">add</span>
+    </button>
+</header>
+
+<!-- FILTRO -->
+<div class="mb-4">
+    <input id="buscar" oninput="filtrar()"
+        class="input"
+        placeholder="Buscar cliente o dirección...">
+</div>
+
+<!-- FORMULARIO -->
+<div id="formPedido" class="hidden bg-white p-5 card border border-outline mb-4">
+
+    <h2 class="font-bold mb-3">Nuevo Pedido</h2>
+
+    <input id="cliente" class="input mb-2" placeholder="Cliente">
+    <input id="direccion" class="input mb-2" placeholder="Dirección">
+    <input id="zona" class="input mb-2" placeholder="Zona (NORTE / SUR)">
+    <input id="total" class="input mb-3" placeholder="Total">
+
+    <button onclick="guardarPedido()"
+        class="w-full bg-primary text-white py-3 rounded-xl font-bold">
+        Guardar Pedido
+    </button>
+
+</div>
+
+<!-- RESUMEN -->
+<div class="grid grid-cols-3 gap-3 mb-4 text-center">
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400">Pendientes</p>
+        <h2 id="pendientes" class="font-black text-warning">0</h2>
+    </div>
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400">Entregados</p>
+        <h2 id="entregados" class="font-black text-success">0</h2>
+    </div>
+
+    <div class="bg-white p-3 card border border-outline">
+        <p class="text-xs text-slate-400">Total $</p>
+        <h2 id="totalGeneral" class="font-black">0</h2>
+    </div>
+
+</div>
+
+<!-- LISTA -->
+<main id="lista" class="flex flex-col gap-3 flex-grow"></main>
+
+<!-- FOOTER -->
+<footer class="mt-6 text-center text-xs text-slate-400 uppercase">
+Kilómetro Cero • 2026
+</footer>
+
+<!-- JS -->
+<script type="module">
+
+const API = "https://script.google.com/macros/s/AKfycbwglNauq2RBBZqcPkamIBqioTShRzO_Jo9Afjo7r0OWC7AKy6740QEeOywZ26Pssm6u/exec";
+
+let pedidos = [];
+
+// =======================
+// 📥 CARGAR
+// =======================
 async function cargarPedidos() {
-  const res = await fetch(`${API}?pestaña=Pedidos`);
-  const data = await res.json();
-
-  let html = "";
-
-  data.forEach(p => {
-    html += `
-      <div style="border:1px solid #ccc;padding:10px;margin:5px;">
-        <b>${p.Cliente}</b><br>
-        ${p.Dirección}<br>
-        Estado: ${p.Estado}<br>
-        <button onclick="entregarPedido(${p.ID})">Entregar</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("lista").innerHTML = html;
+    const res = await fetch(`${API}?pestaña=Pedidos`);
+    pedidos = await res.json();
+    render(pedidos);
 }
 
+// =======================
+// 🎨 RENDER
+// =======================
+function render(data) {
+
+    let html = "";
+    let p = 0, e = 0, total = 0;
+
+    data.forEach(ped => {
+
+        const estado = ped.Estado || "PENDIENTE";
+        const valor = parseFloat(ped.Total) || 0;
+
+        if (estado === "PENDIENTE") p++;
+        if (estado === "ENTREGADO") e++;
+
+        total += valor;
+
+        let color = estado === "PENDIENTE" ? "text-yellow-500" : "text-green-600";
+
+        html += `
+        <div class="bg-white p-4 card border border-outline shadow-sm">
+
+            <div class="flex justify-between">
+                <div>
+                    <h3 class="font-bold">${ped.Cliente}</h3>
+                    <p class="text-xs text-slate-500">${ped.Dirección}</p>
+                    <p class="text-xs text-primary">${ped.Zona || ""}</p>
+                </div>
+
+                <div class="text-right">
+                    <p class="font-bold">$${valor.toFixed(2)}</p>
+                    <p class="text-xs ${color}">${estado}</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-3">
+
+                <button onclick="entregarPedido('${ped.ID}')"
+                    class="flex-1 bg-green-500 text-white py-2 rounded-lg text-xs">
+                    ✔ Entregar
+                </button>
+
+                <button onclick="eliminarPedido('${ped.ID}')"
+                    class="flex-1 bg-red-500 text-white py-2 rounded-lg text-xs">
+                    ✖ Eliminar
+                </button>
+
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById("lista").innerHTML = html;
+
+    document.getElementById("pendientes").innerText = p;
+    document.getElementById("entregados").innerText = e;
+    document.getElementById("totalGeneral").innerText = "$" + total.toFixed(2);
+}
+
+// =======================
+// 🔍 FILTRO
+// =======================
+function filtrar() {
+    const txt = document.getElementById("buscar").value.toLowerCase();
+
+    const filtrado = pedidos.filter(p =>
+        (p.Cliente || "").toLowerCase().includes(txt) ||
+        (p.Dirección || "").toLowerCase().includes(txt)
+    );
+
+    render(filtrado);
+}
+
+// =======================
+// ➕ FORM
+// =======================
+function toggleForm() {
+    document.getElementById("formPedido").classList.toggle("hidden");
+}
+
+// =======================
+// 💾 GUARDAR
+// =======================
+async function guardarPedido() {
+
+    const data = {
+        pestaña: "Pedidos",
+        accion: "crear",
+        Cliente: document.getElementById("cliente").value,
+        Dirección: document.getElementById("direccion").value,
+        Zona: document.getElementById("zona").value,
+        Total: document.getElementById("total").value,
+        Usuario: "Darwin"
+    };
+
+    await fetch(API, {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+
+    alert("Pedido creado");
+
+    toggleForm();
+    cargarPedidos();
+}
+
+// =======================
+// 🚚 ENTREGAR
+// =======================
+async function entregarPedido(id) {
+
+    await fetch(API, {
+        method: "POST",
+        body: JSON.stringify({
+            pestaña: "Pedidos",
+            accion: "entregar",
+            ID: id,
+            Usuario: "Darwin"
+        })
+    });
+
+    cargarPedidos();
+}
+
+// =======================
+// ❌ ELIMINAR
+// =======================
+async function eliminarPedido(id) {
+
+    if (!confirm("¿Eliminar pedido?")) return;
+
+    await fetch(API, {
+        method: "POST",
+        body: JSON.stringify({
+            pestaña: "Pedidos",
+            accion: "eliminar",
+            ID: id
+        })
+    });
+
+    cargarPedidos();
+}
+
+// INIT
 cargarPedidos();
+
 </script>
 
 </body>
