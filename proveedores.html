@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>🚚 Transportadoras</h1>
+
+<div id="prov"></div>
+
+<script src="main.js"></script>
+
+<script>
+async function cargarProv() {
+  const res = await fetch(`${API}?pestaña=Transportadoras`);
+  const data = await res.json();
+
+  let html = "";
+
+  data.forEach(p => {
+    html += `
+      <div>
+        ${p.Nombre} - ${p.Zona} - ${p.Estado}
+      </div>
+    `;
+  });
+
+  document.getElementById("prov").innerHTML = html;
+}
+
+cargarProv();
+</script>
+
+</body>
+</html>
