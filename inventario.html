@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>📊 Inventario</h1>
+
+<div id="inv"></div>
+
+<script src="main.js"></script>
+
+<script>
+async function cargarInv() {
+  const res = await fetch(`${API}?pestaña=Inventario`);
+  const data = await res.json();
+
+  let html = "";
+
+  data.forEach(i => {
+    html += `
+      <div>
+        ${i.Producto} - Stock: ${i.Stock}
+      </div>
+    `;
+  });
+
+  document.getElementById("inv").innerHTML = html;
+}
+
+cargarInv();
+</script>
+
+</body>
+</html>
