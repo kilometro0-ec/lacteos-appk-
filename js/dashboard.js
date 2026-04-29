@@ -1,13 +1,24 @@
-import { getDashboardData } from "../services/dashboardService.js";
+import { get } from "./api.js";
 
-export async function initDashboard() {
-  const data = await getDashboardData();
+export async function getDashboardData() {
+  const ventas = await get("Ventas");
+  const inventario = await get("Inventario");
 
-  const ruta = document.getElementById("badge-ruta");
-  const finanzas = document.getElementById("badge-finanzas");
-  const stock = document.getElementById("badge-stock");
+  const pendientes = ventas.filter(v =>
+    String(v.Estado || "").toUpperCase() === "PENDIENTE"
+  );
 
-  if (ruta) ruta.innerText = data.pendientes;
-  if (finanzas) finanzas.innerText = `$${data.total.toFixed(2)}`;
-  if (stock) stock.innerText = data.stockCritico > 0 ? "!" : 0;
+  const total = pendientes.reduce((acc, v) =>
+    acc + (parseFloat(v.Total || 0) || 0), 0
+  );
+
+  const stockCritico = inventario.filter(i =>
+    (parseFloat(i["Stock Inicial"] || 0)) < 5
+  ).length;
+
+  return {
+    pendientes: pendientes.length,
+    total,
+    stockCritico
+  };
 }
