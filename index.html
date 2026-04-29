@@ -33,6 +33,7 @@
             transition: transform 0.1s ease;
             cursor: pointer;
         }
+
         .grid-button:active {
             transform: scale(0.95);
             filter: brightness(0.9);
@@ -78,7 +79,7 @@
             </p>
         </div>
 
-        <button onclick="window.location.href='DashboardLacteo.html'"
+        <button onclick="window.location.href='finanzas.html'"
             class="w-12 h-12 bg-white rounded-2xl border border-outline flex items-center justify-center text-primary shadow-sm active:scale-90 transition-transform">
             <span class="material-symbols-outlined text-2xl">analytics</span>
         </button>
@@ -87,8 +88,8 @@
     <!-- MAIN -->
     <main id="main-panel" class="grid grid-cols-2 gap-4 flex-grow content-start transition-opacity duration-300 loading-state">
 
-        <!-- VENTAS -->
-        <button onclick="window.location.href='RegistrodeVentas.html'"
+        <!-- PEDIDOS PRINCIPAL -->
+        <button onclick="window.location.href='pedidos.html'"
             class="grid-button col-span-2 bg-primary p-6 rounded-[2.5rem] flex items-center justify-between shadow-lg text-white">
 
             <div class="flex items-center gap-4 text-left">
@@ -96,26 +97,16 @@
                     <span class="material-symbols-outlined text-3xl">add_shopping_cart</span>
                 </div>
                 <div>
-                    <span class="text-xl font-black uppercase italic block">Ventas</span>
-                    <span class="text-[9px] opacity-80 font-medium">Registrar salida de productos</span>
+                    <span class="text-xl font-black uppercase italic block">Pedidos</span>
+                    <span class="text-[9px] opacity-80 font-medium">Registrar y gestionar pedidos</span>
                 </div>
             </div>
 
-            <div id="badge-ventas" class="badge">0</div>
-        </button>
-
-        <!-- PEDIDOS -->
-        <button onclick="window.location.href='PedidosProveedor.html'"
-            class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
-
             <div id="badge-pedidos" class="badge">0</div>
-            <span class="material-symbols-outlined text-3xl text-amber-500">inventory</span>
-            <span class="text-[10px] font-black uppercase text-slate-700">Pedidos</span>
-            <span class="text-[8px] text-slate-400 uppercase">Solicitud</span>
         </button>
 
         <!-- INVENTARIO -->
-        <button onclick="window.location.href='ControldeInventario.html'"
+        <button onclick="window.location.href='inventario.html'"
             class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
 
             <div id="badge-stock" class="badge">!</div>
@@ -125,16 +116,16 @@
         </button>
 
         <!-- PROVEEDORES -->
-        <button onclick="window.location.href='GestiondeProveedores.html'"
+        <button onclick="window.location.href='proveedores.html'"
             class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
 
             <span class="material-symbols-outlined text-3xl text-indigo-500">group</span>
             <span class="text-[10px] font-black uppercase text-slate-700">Prov.</span>
-            <span class="text-[8px] text-slate-400 uppercase">Contactos</span>
+            <span class="text-[8px] text-slate-400 uppercase">Transportadoras</span>
         </button>
 
         <!-- CLIENTES -->
-        <button onclick="window.location.href='GestiondeClientes.html'"
+        <button onclick="window.location.href='clientes.html'"
             class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
 
             <span class="material-symbols-outlined text-3xl text-blue-500">person_search</span>
@@ -143,7 +134,7 @@
         </button>
 
         <!-- FINANZAS -->
-        <button onclick="window.location.href='DashboardLacteo.html#finanzas'"
+        <button onclick="window.location.href='finanzas.html'"
             class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
 
             <div id="badge-finanzas" class="badge">0</div>
@@ -153,7 +144,7 @@
         </button>
 
         <!-- AJUSTES -->
-        <button onclick="window.location.href='DashboardLacteo.html#perfil'"
+        <button onclick="window.location.href='ajustes.html'"
             class="grid-button bg-white border border-outline p-5 rounded-[2.5rem] flex flex-col items-center gap-1 shadow-sm">
 
             <span class="material-symbols-outlined text-3xl text-slate-400">settings</span>
@@ -161,15 +152,15 @@
             <span class="text-[8px] text-slate-400 uppercase">Tienda</span>
         </button>
 
-        <!-- RUTA -->
-        <button onclick="window.location.href='GestióndeDespachos.html'"
+        <!-- RUTA DE HOY -->
+        <button onclick="rutaHoy()"
             class="grid-button col-span-2 bg-slate-900 text-white p-6 rounded-[2.5rem] flex items-center justify-center gap-4 shadow-xl mt-2">
 
             <div id="badge-ruta" class="badge">0</div>
             <span class="material-symbols-outlined text-success text-3xl">local_shipping</span>
             <div class="text-left">
                 <span class="text-sm font-black uppercase tracking-widest block">Ruta de Hoy</span>
-                <span class="text-[9px] opacity-60 uppercase">Despachos Quito</span>
+                <span class="text-[9px] opacity-60 uppercase">Optimización automática</span>
             </div>
         </button>
 
@@ -178,11 +169,11 @@
     <!-- FOOTER -->
     <footer class="mt-8 text-center">
         <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">
-            Quito • 2026 • v1.0.0
+            Kilómetro Cero • 2026 • v1.0.0
         </p>
     </footer>
 
-    <!-- 🚀 LÓGICA EXTERNA -->
+    <!-- JS -->
     <script type="module" src="./main.js"></script>
 
 </body>
