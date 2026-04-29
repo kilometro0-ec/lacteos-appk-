@@ -1,6 +1,18 @@
 async function loadPage(page) {
   const app = document.getElementById("app");
 
+  // 🔵 LOADER (evita pantalla blanca)
+  app.innerHTML = `
+    <div style="
+      padding:20px;
+      font-family:sans-serif;
+      text-align:center;
+      opacity:0.6;
+    ">
+      Cargando...
+    </div>
+  `;
+
   try {
     // cargar HTML de la página
     const res = await fetch(`./pages/${page}.html`);
@@ -20,7 +32,7 @@ async function loadPage(page) {
     console.error("Error cargando página:", error);
 
     app.innerHTML = `
-      <div style="padding:20px;font-family:sans-serif">
+      <div style="padding:20px;font-family:sans-serif;color:red">
         <h2>Error cargando la página</h2>
         <p>Revisa consola (F12)</p>
       </div>
